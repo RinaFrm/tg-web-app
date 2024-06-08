@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.coin_container {
+    margin-bottom: 30px;
+    padding: 10px;
+    background-color: aqua;
+    cursor: pointer;
+}
+
+.score {
+    margin-bottom: 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 30px;
+}
+
+.energy {
+    width: 90%;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    height: 40px;
+    background-color: beige;
+    border-radius: 20px;
+    font-size: 30px;
+    letter-spacing: 40px;
+    color: bisque;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.energy_score {
+    background-color: chocolate;
+    border-radius: 20px;
+    height: 100%;
+    left: 0;
+}
