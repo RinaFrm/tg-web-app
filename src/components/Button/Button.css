@@ -1,10 +1,11 @@
 .button {
     padding: 10px 15px;
     background: beige;
-    color: var(--tg-theme-button-text-color);
+    color: black;
     border: none;
     outline: none;
     cursor: pointer;
+    border-radius: 20px;
     font-family: 'Courier New', Courier, monospace;
     font-size: 24px;
 }
