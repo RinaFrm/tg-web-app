@@ -1,8 +1,10 @@
 .button {
     padding: 10px 15px;
-    background: var(--tg-theme-button-color);
+    background: beige;
     color: var(--tg-theme-button-text-color);
     border: none;
     outline: none;
     cursor: pointer;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 24px;
 }

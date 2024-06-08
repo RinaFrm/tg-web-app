@@ -17,7 +17,7 @@ const Clicker = () => {
     return (
         <div className="container">
             <div className="coin_container" onClick={ClickCoin}>
-                <img src="./assets/coin.png" alt="coin" />
+                <img src={require("../../assets/coin.png")} alt="coin" />
             </div>
             <div className="score">Score: {score}</div>
             <div className="energy">
