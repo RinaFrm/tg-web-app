@@ -5,5 +5,14 @@
 }
 
 body {
-  background-color: azure;
+  height: 100vh;
+  background: var(--back-color);
+  background-repeat: no-repeat;
+}
+
+.app_container {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 5%;
 }
