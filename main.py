@@ -84,4 +84,4 @@ async def update_user_name(autofarm_params: AutofarmParams, username: str = Path
         update_user_autofarm_params_in_db(username, autofarm_params)
     except ValueError as e:
         return {"message": str(e)}
-    return {"message": "User farm params updated successfully"}
+    return {"message": "User autofarm params updated successfully"}
