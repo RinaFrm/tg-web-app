@@ -1,10 +1,25 @@
 from fastapi import FastAPI, HTTPException, Path
+from fastapi.middleware.cors import CORSMiddleware
 
 from classes import User, UpdateUsernameRequest, UpdatePointsRequest, FarmParams, AutofarmParams
 from database.models import add_user, get_user, get_all_users, update_username_for_user_in_db, update_user_points_in_db, \
     update_user_farm_params_in_db, update_user_autofarm_params_in_db
 
 app = FastAPI()
+
+# Настройка CORS
+origins = [
+    "http://localhost:3000",
+    # Добавьте другие допустимые источники, если необходимо
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/users")
