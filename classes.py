@@ -12,6 +12,7 @@ class FarmParams(BaseModel):
 
 class AutofarmParams(BaseModel):
     farm_time: str
+    auto_farm_points: float
     farm_points_per_min: int
     farm_time_start: datetime
     full_bar_multiplier: float
@@ -27,6 +28,6 @@ class UpdateUsernameRequest(BaseModel):
 
 
 class UpdatePointsRequest(BaseModel):
-    points: int
+    points: float
 
 

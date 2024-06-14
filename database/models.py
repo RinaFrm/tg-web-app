@@ -20,6 +20,7 @@ def add_user(username):
         },
         'autofarm_params': {
             'farm_time': '8h',
+            'auto_farm_points': 0,
             'farm_points_per_min': 2,
             'farm_time_start': 0,
             'full_bar_multiplier': 1.25,
