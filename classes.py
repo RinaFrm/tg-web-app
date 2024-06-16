@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 class FarmParams(BaseModel):
     energy: int
+    max_energy: int
     points_per_click: int
     recovery_time: str
     recovery_start_time: datetime
@@ -29,5 +30,9 @@ class UpdateUsernameRequest(BaseModel):
 
 class UpdatePointsRequest(BaseModel):
     points: float
+
+
+class UpdateStatusRequest(BaseModel):
+    new_status: str
 
 

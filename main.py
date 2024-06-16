@@ -1,9 +1,8 @@
 from fastapi import FastAPI, HTTPException, Path
 from fastapi.middleware.cors import CORSMiddleware
 
-from classes import User, UpdateUsernameRequest, UpdatePointsRequest, FarmParams, AutofarmParams
-from database.models import add_user, get_user, get_all_users, update_username_for_user_in_db, update_user_points_in_db, \
-    update_user_farm_params_in_db, update_user_autofarm_params_in_db
+from classes import User, UpdateUsernameRequest, UpdatePointsRequest, UpdateStatusRequest
+from database.models import *
 
 app = FastAPI()
 
@@ -20,6 +19,12 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+def user_exist_check(username):
+    existing_user = get_user(username)
+    if not existing_user:
+        raise HTTPException(status_code=404, detail="User not found")
 
 
 @app.get("/users")
@@ -47,9 +52,7 @@ async def create_user(user: User):
 
 @app.put("/users/{username}/update/username")
 async def update_user_name(update_request: UpdateUsernameRequest, username: str = Path(...)):
-    existing_user = get_user(username)
-    if not existing_user:
-        raise HTTPException(status_code=404, detail="User not found")
+    user_exist_check(username)
 
     new_username = update_request.new_username
     if get_user(new_username):
@@ -63,10 +66,8 @@ async def update_user_name(update_request: UpdateUsernameRequest, username: str 
 
 
 @app.put("/users/{username}/update/points")
-async def update_user_name(update_request: UpdatePointsRequest, username: str = Path(...)):
-    existing_user = get_user(username)
-    if not existing_user:
-        raise HTTPException(status_code=404, detail="User not found")
+async def update_user_points(update_request: UpdatePointsRequest, username: str = Path(...)):
+    user_exist_check(username)
 
     points = update_request.points
     try:
@@ -77,10 +78,8 @@ async def update_user_name(update_request: UpdatePointsRequest, username: str = 
 
 
 @app.put("/users/{username}/update/farm_params")
-async def update_user_name(farm_params: FarmParams, username: str = Path(...)):
-    existing_user = get_user(username)
-    if not existing_user:
-        raise HTTPException(status_code=404, detail="User not found")
+async def update_user_farm_params(farm_params: FarmParams, username: str = Path(...)):
+    user_exist_check(username)
 
     try:
         update_user_farm_params_in_db(username, farm_params)
@@ -90,13 +89,34 @@ async def update_user_name(farm_params: FarmParams, username: str = Path(...)):
 
 
 @app.put("/users/{username}/update/autofarm_params")
-async def update_user_name(autofarm_params: AutofarmParams, username: str = Path(...)):
-    existing_user = get_user(username)
-    if not existing_user:
-        raise HTTPException(status_code=404, detail="User not found")
+async def update_user_autofarm_params(autofarm_params: AutofarmParams, username: str = Path(...)):
+    user_exist_check(username)
 
     try:
         update_user_autofarm_params_in_db(username, autofarm_params)
     except ValueError as e:
         return {"message": str(e)}
     return {"message": "User autofarm params updated successfully"}
+
+
+@app.put("/users/{username}/update/energy/status")
+async def update_user_energy_status(update_request: UpdateStatusRequest, username: str = Path(...)):
+    user_exist_check(username)
+
+    try:
+        update_user_energy_status_in_db(username, update_request.new_status)
+    except ValueError as e:
+        return {"message": str(e)}
+    return {"message": "User autofarm params updated successfully"}
+
+
+@app.put("/users/{username}/update/autofarm/status")
+async def update_user_autofarm_status(update_request: UpdateStatusRequest, username: str = Path(...)):
+    user_exist_check(username)
+
+    try:
+        update_user_autofarm_status_in_db(username, update_request.new_status)
+    except ValueError as e:
+        return {"message": str(e)}
+    return {"message": "User autofarm params updated successfully"}
+
