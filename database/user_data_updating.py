@@ -42,3 +42,12 @@ def user_data_updating(user):
 
     return user
 
+
+async def update_users():
+    result = users_collection.update_many(
+        {},
+        {'$set': {'farm_params.max_energy': 1000}}
+    )
+
+    print(f"Matched {result.matched_count} documents and modified {result.modified_count} documents.")
+

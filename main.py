@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from classes import User, UpdateUsernameRequest, UpdatePointsRequest, UpdateStatusRequest
 from database.models import *
+from database.user_data_updating import update_users
 
 app = FastAPI()
 
@@ -19,6 +20,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.on_event("startup")
+async def startup_event():
+    await update_users()
 
 
 def user_exist_check(username):
