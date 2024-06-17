@@ -52,7 +52,8 @@ def get_all_users():
 
 
 def update_field_in_db(username: str, field: str, value):
-    result = users_collection.update_one({'username': username}, {'$set': {field: value, 'updated_at': datetime.utcnow()}})
+    result = users_collection.update_one({'username': username},
+                                         {'$set': {field: value, 'updated_at': datetime.utcnow()}})
     if result.modified_count == 0:
         raise ValueError(f"No one field has been changed")
 
@@ -63,6 +64,10 @@ def update_username_for_user_in_db(username: str, new_username: str):
 
 def update_user_points_in_db(username: str, points: float):
     update_field_in_db(username, 'points', points)
+
+
+def update_user_energy_in_db(username: str, energy: int):
+    update_field_in_db(username, 'farm_params.energy', energy)
 
 
 def update_user_farm_params_in_db(username: str, farm_params: FarmParams):

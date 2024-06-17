@@ -76,8 +76,10 @@ async def update_user_points(update_request: UpdatePointsRequest, username: str 
     user_exist_check(username)
 
     points = update_request.points
+    energy = update_request.energy
     try:
         update_user_points_in_db(username, points)
+        update_user_energy_in_db(username, energy)
     except ValueError as e:
         return {"message": str(e)}
     return {"message": "User points updated successfully"}

@@ -30,6 +30,7 @@ class UpdateUsernameRequest(BaseModel):
 
 class UpdatePointsRequest(BaseModel):
     points: float
+    energy: int
 
 
 class UpdateStatusRequest(BaseModel):
