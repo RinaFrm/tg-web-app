@@ -44,7 +44,7 @@ function App() {
   useEffect(() => {
     tg.ready();
     dispatch(getUsers());
-    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
+    user?.username ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
   
     if (!currentUser && !users.find(user => user.username === currentUser?.username)) {
       addUser(currentUser.username)
