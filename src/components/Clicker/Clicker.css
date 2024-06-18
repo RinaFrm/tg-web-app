@@ -1,0 +1,77 @@
+.container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    padding: 10px;
+    height: 80%;
+}
+
+.coin__container {
+    margin-bottom: 100px;
+    cursor: pointer;
+    border-radius: 260px;
+}
+
+.coin__img {
+    width: 250px;
+    height: 250px;
+}
+
+.score {
+    margin-bottom: 5%;
+    font-size: 30px;
+    color: hsl(var(--nextui-warning-200));
+}
+
+.energy__index {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 2%;
+    font-size: 14px;
+    color: hsl(var(--nextui-warning-200));
+}
+
+.autofarm {
+    margin-top: 5%;
+    width: 100%;
+    transition: all .3s ease
+}
+
+.autofarm__btn {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.autofarm__container {
+    position: relative;
+    width: 100%;
+    height: 40px;
+    opacity: 0.5;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: hsl(var(--nextui-primary-700));
+}
+
+.autofarm__scale {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: hsl(var(--nextui-primary-800));
+    transition: all .2s ease;
+}
+
+.autofarm_text {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+    color: white;
+}
