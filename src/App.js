@@ -42,15 +42,14 @@ function App() {
   const {currentUser, loadingUser} = useSelector((state) => state.users);
 
   useEffect(() => {
-  tg.ready();
+    tg.ready();
+    dispatch(getUsers());
+    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
+  
+    if (!currentUser && !users.find(user => user.username === currentUser?.username)) {
+      addUser(currentUser.username)
+    } 
   }, []);
-
-  dispatch(getUsers());
-  user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
-
-  if (!currentUser && !users.find(user => user.username === currentUser?.username)) {
-    addUser(currentUser.username)
-  } 
 
   const addUser = (username) => {
     axios.post(process.env.REACT_APP_API + 'users', {
@@ -108,7 +107,7 @@ function App() {
         >
           Close
         </Button>  
-        <div>{user}</div>
+        <div>{tg.initDataUnsafe?.user?.username}</div>
         {loadingUser === 'success' &&
           <><Header />
           <Clicker /></>
