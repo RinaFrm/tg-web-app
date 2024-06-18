@@ -34,7 +34,7 @@ const Clicker = () => {
 
     const date = new Date();
     const timeLeftInSec =  Math.round((new Date(date.getTime() + date.getTimezoneOffset() * 60000) - (new Date(currentUser.farm_params.recovery_start_time).getTime())) / 1000);
-    const [hoursE, minutesE, secondsE] = currentUser.farm_params.recovery_start_time === 0 ? formatTime(currentUser.farm_params.recovery_time) : formatMinTime(3600 - timeLeftInSec);
+    const [hoursE, minutesE, secondsE] = timeLeftInSec > 3600 ? formatTime(currentUser.farm_params.recovery_time) : formatMinTime(3600 - timeLeftInSec);
     const [[hE, mE, sE], setEnergyTime] = useState([hoursE, minutesE, secondsE]);
 
     function ClickCoin() {

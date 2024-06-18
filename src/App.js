@@ -38,18 +38,18 @@ function App() {
   const { tg, user } = useTelegram();
   const dispatch = useDispatch();
 
+  const {users, loadingUsers} = useSelector((state) => state.users);
+  const {currentUser, loadingUser} = useSelector((state) => state.users);
+
   useEffect(() => {
   tg.ready();
   dispatch(getUsers());
-  user && dispatch(getUser(user?.username));
+  user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
 
   if (!currentUser && !users.find(user => user.username === currentUser?.username)) {
     addUser(currentUser.username)
   } 
   }, []);
-
-  const {users, loadingUsers} = useSelector((state) => state.users);
-  const {currentUser, loadingUser} = useSelector((state) => state.users);
 
   const addUser = (username) => {
     axios.post(process.env.REACT_APP_API + 'users', {
