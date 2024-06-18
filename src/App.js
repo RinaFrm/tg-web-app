@@ -108,7 +108,8 @@ function App() {
         >
           Close
         </Button>  
-        <div>{tg.initDataUnsafe?.user?.username}</div>
+        <div style={{color: 'hsl(var(--nextui-warning-200))'}}>{tg.initDataUnsafe?.user?.username}</div>
+        <div style={{color: 'hsl(var(--nextui-warning-200))'}}>{currentUser}</div>
         {loadingUser === 'success' &&
           <><Header />
           <Clicker /></>
