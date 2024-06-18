@@ -44,9 +44,8 @@ function App() {
   useEffect(() => {
     tg.ready();
     dispatch(getUsers());
-    dispatch(getUser(user?.username)) 
-    // : dispatch(getUser('test_user'));
-  
+    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
+
     if (!currentUser && !users.find(user => user.username === currentUser?.username)) {
       addUser(currentUser.username)
     } 
@@ -108,8 +107,6 @@ function App() {
         >
           Close
         </Button>  
-        <div style={{color: 'hsl(var(--nextui-warning-200))'}}>{tg.initDataUnsafe?.user?.username}</div>
-        <div style={{color: 'hsl(var(--nextui-warning-200))'}}>{currentUser}</div>
         {loadingUser === 'success' &&
           <><Header />
           <Clicker /></>
