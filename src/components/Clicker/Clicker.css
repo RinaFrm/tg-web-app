@@ -19,57 +19,59 @@
 }
 
 .score {
-    margin-bottom: 20px;
-    font-family: 'Courier New', Courier, monospace;
+    margin-bottom: 5%;
     font-size: 30px;
-    color: var(--text-color);
+    color: hsl(var(--nextui-warning-200));
 }
 
-.energy__container {
+.energy__index {
     width: 100%;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 5%;
+    margin-top: 2%;
+    font-size: 14px;
+    color: hsl(var(--nextui-warning-200));
 }
 
-.energy__title {
-    align-self: flex-start;
-    margin-bottom: 2%;
-    font-size: 18px;
-    font-weight: normal;
-    color: var(--text-color);
+.autofarm {
+    margin-top: 5%;
+    width: 100%;
+    transition: all .3s ease
 }
 
-.energy__pb {
+.autofarm__btn {
+    width: 100%;
+    border-radius: 5px;
+}
+
+.autofarm__container {
     position: relative;
     width: 100%;
-    align-items: center;
-    justify-content: flex-start;
-    display: flex;
-    height: 25px;
-    background-color: var(--grey500);
-    border-radius: 5px;
-    overflow: hidden;
-    font-family: 'Courier New', Courier, monospace;
-}
-
-.energy__scale {
-    background-color: var(--grey600);
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    height: 100%;
-    left: 0;
-}
-
-.energy__score {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 16px;
-    letter-spacing: 5px;
+    height: 40px;
     opacity: 0.5;
-    color: var(--grey300);
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: hsl(var(--nextui-primary-700));
 }
 
+.autofarm__scale {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: hsl(var(--nextui-primary-800));
+    transition: all .2s ease;
+}
+
+.autofarm_text {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+    color: white;
+}

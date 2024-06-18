@@ -5,11 +5,11 @@
     align-items: center;
     justify-content: flex-end;
     padding: 0 20px;
-    margin-top: 20px;
 }
 
 .username {
     margin-left: auto;
+    color: hsl(var(--nextui-warning-200));
     font-family: 'Courier New', Courier, monospace;
     font-size: 24px;
 }
