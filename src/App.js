@@ -56,6 +56,7 @@ function App() {
     tg.ready();
 
     dispatch(getUsers());
+    console.log(currentUser)
     if (currentUser?.username === '' && users.find(user => user.username === currentUser?.username)) {
       user ? addUser(user.username) : addUser('test_user');
     } else {
@@ -100,7 +101,7 @@ function App() {
         }
         {loadingUser === 'success' &&
           <>
-          <p style={{color: 'hsl(var(--nextui-warning-200))'}}>{[loadingUser, currentUser, user.username]}</p>
+          <p style={{color: 'hsl(var(--nextui-warning-200))'}}>{[loadingUser, currentUser, user ? user.username : '']}</p>
           <Header />
           <Clicker />
           </>
