@@ -55,13 +55,22 @@ function App() {
   useEffect(() => {
     tg.ready();
 
-    dispatch(getUsers());
-    console.log(currentUser)
-    if (currentUser?.username === '' && users.find(user => user.username === currentUser?.username)) {
-      user ? addUser(user.username) : addUser('test_user');
-    } else {
-      user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
-    }
+    dispatch(getUsers())
+      .then(() => {
+        if (currentUser?.username) {
+          const existingUser = users.find(user => user.username === currentUser.username);
+          if (!existingUser) {
+            dispatch(addUser(currentUser.username));
+          } else {
+            dispatch(getUser(currentUser.username));
+          }
+        } else {
+          dispatch(getUser('test_user'));
+        }
+      })
+      .catch(error => {
+        console.log('Error loading users', error);
+      })
   }, []);
 
   const addUser = (username) => {
