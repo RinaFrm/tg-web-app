@@ -9,7 +9,7 @@ const Header = () => {
         <div className='header'>
             <span className='username'>
                 {user ? user.username : <span>User</span>}
-                {user ? user : ''}
+                {/* {user ? user : ''} */}
             </span>
         </div>
     )

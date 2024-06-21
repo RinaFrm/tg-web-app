@@ -4,7 +4,7 @@ import axios from 'axios';
 export const getUsers = createAsyncThunk(
     'users/getUsers',
     async () => {
-        const response = await axios.get(process.env.REACT_APP_API + 'users/')
+        const response = await axios.get('https://eco.almazor.co/users');
         return response.data;
     }
 )
@@ -12,7 +12,7 @@ export const getUsers = createAsyncThunk(
 export const getUser = createAsyncThunk(
     'user/getUser',
     async (username) => {
-        const response = await axios.get(process.env.REACT_APP_API + `users/${username}`)
+        const response = await axios.get(`https://eco.almazor.co/users/${username}`)
         return response.data;
     }
 )
@@ -22,10 +22,10 @@ const usersSlice = createSlice({
     initialState: {
         users: [],
         currentUser: {
-            username: 'User',
-            points: 0,
+            username: 'test_user',
+            points: null,
             farm_params: {
-                energy: 1000,
+                energy: null,
                 max_energy: 1000,
                 points_per_click: 1,
                 recovery_time: '1h',
@@ -52,7 +52,7 @@ const usersSlice = createSlice({
             state.currentUser.points = action.payload;
         },
         updateUsername: (state, action) => {
-            state.users.username = action.payload;
+            state.currentUser.username = action.payload;
         },
         updateEnergy: (state, action) => {
             state.currentUser.farm_params.energy = action.payload;

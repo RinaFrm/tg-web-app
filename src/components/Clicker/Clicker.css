@@ -11,6 +11,11 @@
     margin-bottom: 100px;
     cursor: pointer;
     border-radius: 260px;
+    transition: transfrom .5s ease;
+}
+
+.coin__container:active {
+    transform: scale(0.9);
 }
 
 .coin__img {

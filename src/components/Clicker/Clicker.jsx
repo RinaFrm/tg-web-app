@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import './Clicker.css';
 import { Progress } from "@nextui-org/progress";
-import { Button } from "@nextui-org/react";
+import { Button, Modal, ModalBody, ModalContent, ModalFooter, Spinner, Switch, useDisclosure } from "@nextui-org/react";
 import { useDispatch, useSelector } from "react-redux";
 import { addPoints, updateEnergy, updateSliceAutofarmStatus } from "../../store/slices/users";
-import { putEnergyStatus, updateAutofarmStatus } from "../../App";
+import { putEnergyStatus, putPoints, updateAutofarmStatus } from "../../App";
 
 const Clicker = () => {
     const dispatch = useDispatch();
     const { currentUser, loadingUser } = useSelector((state) => state.users);
-    const userPoints = currentUser.points;
+    const userPoints = Number(currentUser.points).toFixed(2);
     const userEnergy = currentUser.farm_params.energy;
     const maxEnergy = currentUser.farm_params.max_energy;
     const pointsPerClick = currentUser.farm_params.points_per_click;
     const energyStatus = currentUser.farm_params.status;
-    const [score, setScore] = useState(Number(userPoints).toFixed(2));
-
+   
     const formatTime = (time) => {
         const hours = time.slice(-1) === 'h' ? time.slice(0, -1) : 8;
         const minutes = time.slice(-1) === 'm' ? time.slice(0, -1) : 0;
@@ -32,21 +31,25 @@ const Clicker = () => {
         return [hours, minutes, seconds];
     }
 
+    //TAP
     const date = new Date();
     const timeLeftInSec =  Math.round((new Date(date.getTime() + date.getTimezoneOffset() * 60000) - (new Date(currentUser.farm_params.recovery_start_time).getTime())) / 1000);
     const [hoursE, minutesE, secondsE] = timeLeftInSec > 3600 ? formatTime(currentUser.farm_params.recovery_time) : formatMinTime(3600 - timeLeftInSec);
     const [[hE, mE, sE], setEnergyTime] = useState([hoursE, minutesE, secondsE]);
 
+    //modal for energy out
+    const {isOpen, onOpen, onClose} = useDisclosure();
+
     function ClickCoin() {
         if(userEnergy >= pointsPerClick) {
             userEnergy === maxEnergy && putEnergyStatus(currentUser.username, 'Recovery');
-            const changeScore = Number(score) + Number(pointsPerClick);
+            const changeScore = Number(userPoints) + Number(pointsPerClick);
             const changeEnergy = Number(userEnergy) - Number(pointsPerClick);
-            setScore(changeScore.toFixed(2));
             dispatch(updateEnergy(changeEnergy));
-            dispatch(addPoints(Number(changeScore.toFixed(2))))
+            dispatch(addPoints(Number(changeScore.toFixed(2))));
+            putPoints(currentUser.username, currentUser.points, currentUser.farm_params.energy);
         } else {
-            alert('Out of energy');
+            onOpen();
         }
     }
 
@@ -82,16 +85,16 @@ const Clicker = () => {
     const [hours, minutes, seconds] = currentUser.autofarm_params.farm_time_start === 0 ? formatTime(farmTime) : formatMinTime(28800 - farmTimeLeftInSec);
     const [[h, m, s], setTime] = useState([hours, minutes, seconds]);
     const totalSeconds = seconds + minutes * 60 + hours * 3600;
-    const userFarmingScore = currentUser.autofarm_params.auto_farm_points;
     const autofarmStatus = currentUser.autofarm_params.status;
-    const [btnState, setBtnState] = useState(autofarmStatus === 'Farming' ? 'farming' : 'idle');
     const farmPointsPerMin = currentUser.autofarm_params.farm_points_per_min;
-    const [farmingScore, setFarmingScore] = useState(autofarmStatus === 'Not farming' ? Number(userFarmingScore) : (farmTimeLeftInSec / 60) * farmPointsPerMin);
+    const userFarmingScore = autofarmStatus === 'Not farming' ? currentUser.autofarm_params.status : (farmTimeLeftInSec / 60 * Number(farmPointsPerMin).toFixed(2));
+    const [btnState, setBtnState] = useState(autofarmStatus === 'Farming' ? 'farming' : 'idle');
+    const [farmingScore, setFarmingScore] = useState(userFarmingScore);
     const farmingScaleProcent = 100 - totalSeconds / ((seconds + minutes*60 + hours*3600) / 100);
 
     const tick = (hours, minutes, seconds) => {
         if (hours === 0 & minutes === 0 & seconds === 0) {
-            dispatch(updateAutofarmStatus('Claim'))
+            dispatch(updateAutofarmStatus('Claim'));
             setBtnState('claim');
         } else if (minutes === 0 && seconds === 0) {
             setTime([hours - 1, 59, 59]);
@@ -135,12 +138,12 @@ const Clicker = () => {
     const claimMultiply = () => {
         const multiplyScore = Number(farmingScore) * fullBarMultiplier;
         claim();
-        dispatch(addPoints((Number(score) + Number(farmingScore) * multiplyScore).toFixed(2)));
+        dispatch(addPoints((Number(userPoints) + Number(farmingScore) * multiplyScore).toFixed(2)));
     }
 
     const claimAndStop = () => {
         claim();
-        dispatch(addPoints((Number(score) + Number(farmingScore))));
+        dispatch(addPoints((Number(userPoints) + Number(farmingScore))));
     }
 
     return (
@@ -149,7 +152,7 @@ const Clicker = () => {
             <Spinner label="Loading" color="warning" labelColor="warning" size="lg"/>
             :
             <>
-            <div className="score">{score}</div>
+            <div className="score">{userPoints}</div>
             <div className="coin__container" onClick={ClickCoin}>
                 <img className="coin__img" src={require("../../assets/coin.png")} alt="coin" />
             </div>
@@ -206,6 +209,23 @@ const Clicker = () => {
                     </Button>
                 }
             </div>
+            <Modal 
+                size="sm" 
+                isOpen={isOpen} 
+                onClose={onClose}
+                classNames={{
+                    body: 'py-5',
+                    base: "bg-[#CCE3FD] text-[#001731]",
+                }}          
+            >
+                <ModalContent>
+                    {(onClose) => (
+                        <ModalBody>
+                            <p>Out of energy! Wait 1h for recovery.</p>
+                        </ModalBody>
+                    )}
+                </ModalContent>
+            </Modal>
             </>
             }
         </div>
