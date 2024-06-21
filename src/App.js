@@ -100,6 +100,7 @@ function App() {
         }
         {loadingUser === 'success' &&
           <>
+          <p style={{color: 'hsl(var(--nextui-warning-200))'}}>{[loadingUser, currentUser, user.username]}</p>
           <Header />
           <Clicker />
           </>
