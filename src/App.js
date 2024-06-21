@@ -51,16 +51,16 @@ function App() {
   const dispatch = useDispatch();
 
   const {users, loadingUsers, currentUser, loadingUser} = useSelector((state) => state.users);
-console.log(currentUser)
+
   useEffect(() => {
     tg.ready();
 
     dispatch(getUsers());
-    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
-
     if (currentUser?.username === '' && users.find(user => user.username === currentUser?.username)) {
       user ? addUser(user.username) : addUser('test_user');
-    } 
+    } else {
+      user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
+    }
   }, []);
 
   const addUser = (username) => {
