@@ -92,7 +92,7 @@ const Clicker = () => {
     const totalSeconds = seconds + minutes * 60 + hours * 3600;
     const autofarmStatus = currentUser.autofarm_params.status;
     const farmPointsPerMin = currentUser.autofarm_params.farm_points_per_min;
-    const userFarmingScore = autofarmStatus === 'Not farming' ? currentUser.autofarm_params.auto_farm_points : (farmTimeLeftInSec / 60 * Number(farmPointsPerMin).toFixed(2));
+    const userFarmingScore = autofarmStatus === 'Not farming' ? currentUser.autofarm_params.auto_farm_points : ((farmTimeLeftInSec / 60 * Number(farmPointsPerMin)).toFixed(2));
     const [btnState, setBtnState] = useState(autofarmStatus === 'Farming' ? 'farming' : 'idle');
     const [farmingScore, setFarmingScore] = useState(userFarmingScore);
     const farmingScaleProcent = 100 - totalSeconds / ((seconds + minutes*60 + hours*3600) / 100);
@@ -146,7 +146,6 @@ const Clicker = () => {
         putPoints(currentUser.username, (Number(userPoints) + Number(farmingScore) * multiplyScore).toFixed(2), currentUser.farm_params.energy);
         claim();
     }
-    
 
     const claimAndStop = () => {
         dispatch(addPoints((Number(userPoints) + Number(farmingScore))));
@@ -154,37 +153,51 @@ const Clicker = () => {
         claim();
     }
 
+    //MODE 
+    const [mode, setMode] = useState('none');
+    useEffect(() => {
+        if (energyStatus === 'Recovery') {
+            setMode('tap');
+        } else if (autofarmStatus === 'Farming') {
+            setMode('farming');
+        } else {
+            setMode('none');
+        }
+    }, [energyStatus, autofarmStatus])
+
     return (
         <div className="container">
             {loadingUser === 'loading' ? 
             <Spinner label="Loading" color="warning" labelColor="warning" size="lg"/>
             :
             <>
-            <div className="score">{userPoints}</div>
-            <div className="coin__container" onClick={ClickCoin}>
-                <img className="coin__img" src={require("../../assets/coin.png")} alt="coin" />
-            </div>
-            <Progress 
-                label="Energy"
-                size="sm"
-                radius="sm"
-                value={userEnergy}
-                maxValue={maxEnergy}
-                classNames={{
-                    base: "max-m-md",
-                    track: "drop-shadow-md",
-                    indicator: "bg-gradient-to-r from-pink-500 to-yellow-500",
-                    label: "tracking-wider text-zinc-200",
-                    value: "text-zinc-300"
-                }}
-            />
-            <div className="energy__index">
-                <span className="energy__value">{userEnergy}</span>
-                <div className="energy__timer">
-                    {`Recovery time: ${hE.toString().padStart(2, '0')}:${mE.toString().padStart(2, '0')}:${sE.toString().padStart(2, '0')}`}
+            <div className="tap" style={mode === 'farming' ? {pointerEvents: 'none', opacity: '0.5'} : {}}>
+                <div className="score">{userPoints}</div>
+                <div className="coin__container" onClick={ClickCoin}>
+                    <img className="coin__img" src={require("../../assets/coin.png")} alt="coin" />
+                </div>
+                <Progress 
+                    label="Energy"
+                    size="sm"
+                    radius="sm"
+                    value={userEnergy}
+                    maxValue={maxEnergy}
+                    classNames={{
+                        base: "max-m-md",
+                        track: "drop-shadow-md",
+                        indicator: "bg-gradient-to-r from-pink-500 to-yellow-500",
+                        label: "tracking-wider text-zinc-200",
+                        value: "text-zinc-300"
+                    }}
+                />
+                <div className="energy__index">
+                    <span className="energy__value">{userEnergy}</span>
+                    <div className="energy__timer">
+                        {`Recovery time: ${hE.toString().padStart(2, '0')}:${mE.toString().padStart(2, '0')}:${sE.toString().padStart(2, '0')}`}
+                    </div>
                 </div>
             </div>
-            <div className="autofarm">
+            <div className="autofarm" style={mode === 'tap' ? {pointerEvents: 'none', opacity: '0.5'} : {}}>
                 {btnState === 'idle' &&
                     <Button 
                     color="primary" 
