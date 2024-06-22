@@ -91,13 +91,14 @@ const Clicker = () => {
     const farmTime = currentUser.autofarm_params.farm_time;
     const farmTimeLeftInSec =  Math.round((new Date(date.getTime() + date.getTimezoneOffset() * 60000) - (new Date(currentUser.autofarm_params.farm_time_start).getTime())) / 1000);
     // const [hours, minutes, seconds] = currentUser.autofarm_params.farm_time_start === 0 ? formatTime(farmTime) : formatMinTime(28800 - farmTimeLeftInSec);
-    const [hours, minutes, seconds] = currentUser.autofarm_params.farm_time_start === 0 ? formatTime(farmTime) : formatTime(farmTime - farmTimeLeftInSec);
+    const [hours, minutes, seconds] = farmTimeLeftInSec > farmTime ? formatTime(farmTime) : formatTime(farmTime - farmTimeLeftInSec);
     const [[h, m, s], setTime] = useState([hours, minutes, seconds]);
     const autofarmStatus = currentUser.autofarm_params.status;
     const farmPointsPerMin = currentUser.autofarm_params.farm_points_per_min;
     const userFarmingScore = autofarmStatus === 'Not farming' ? Number(currentUser.autofarm_params.auto_farm_points).toFixed(2) : ((farmTimeLeftInSec / 60 * Number(farmPointsPerMin)).toFixed(2));
     const [btnState, setBtnState] = useState(autofarmStatus === 'Farming' ? 'farming' : 'idle');
     const [farmingScore, setFarmingScore] = useState(userFarmingScore);
+    const farmingScaleProcent = 100 - (h*3600 + m*60 + s) / (farmTime / 100);
 
     const tick = (hours, minutes, seconds) => {
         if (hours === 0 & minutes === 0 & seconds === 0) {
@@ -115,7 +116,7 @@ const Clicker = () => {
     useEffect(() => {
         const farmingTimer = setInterval(() => {
             if(btnState === 'farming') {
-               tick(h, m, s) 
+                tick(h, m, s) 
             } else {
                 clearInterval(farmingTimer);
             }
@@ -210,7 +211,7 @@ const Clicker = () => {
                 }
                 {btnState === 'farming' &&
                     <div onClick={() => claimAndStop()} className="autofarm__container">
-                        {/* <div style={{width: `${farmingScaleProcent}%`}} className="autofarm__scale"/> */}
+                        <div style={{width: `${farmingScaleProcent}%`}} className="autofarm__scale"/>
                         <div className="autofarm_text">
                             <p className="autofarm__title">Farming: <span className="autofarm__score">{Number(farmingScore).toFixed(2)}</span></p>
                             <div className="autofarm__timer">
