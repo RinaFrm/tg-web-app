@@ -94,14 +94,13 @@ const Clicker = () => {
     const [[h, m, s], setTime] = useState([hours, minutes, seconds]);
     const autofarmStatus = currentUser.autofarm_params.status;
     const farmPointsPerMin = currentUser.autofarm_params.farm_points_per_min;
-    const userFarmingScore = autofarmStatus === 'Not farming' ? currentUser.autofarm_params.auto_farm_points : ((farmTimeLeftInSec / 60 * Number(farmPointsPerMin)).toFixed(2));
+    const userFarmingScore = autofarmStatus === 'Not farming' ? Number(currentUser.autofarm_params.auto_farm_points).toFixed(2) : ((farmTimeLeftInSec / 60 * Number(farmPointsPerMin)).toFixed(2));
     const [btnState, setBtnState] = useState(autofarmStatus === 'Farming' ? 'farming' : 'idle');
     const [farmingScore, setFarmingScore] = useState(userFarmingScore);
-    const farmingScaleProcent = 100 - farmTime / farmTimeLeftInSec;
+    const farmingScaleProcent = farmTimeLeftInSec / (farmTime / 100);
 
     const tick = (hours, minutes, seconds) => {
         if (hours === 0 & minutes === 0 & seconds === 0) {
-            dispatch(updateAutofarmStatus('Claim'));
             setBtnState('claim');
         } else if (minutes === 0 && seconds === 0) {
             setTime([hours - 1, 59, 59]);
@@ -143,9 +142,9 @@ const Clicker = () => {
     const fullBarMultiplier = currentUser.autofarm_params.full_bar_multiplier;
 
     const claimMultiply = () => {
-        const multiplyScore = Number(farmingScore) * fullBarMultiplier;
-        dispatch(addPoints((Number(userPoints) + Number(farmingScore) * multiplyScore).toFixed(2)));
-        putPoints(currentUser.username, (Number(userPoints) + Number(farmingScore) * multiplyScore).toFixed(2), currentUser.farm_params.energy);
+        const multiplyScore = Number(farmingScore) * Number(fullBarMultiplier);
+        dispatch(addPoints(Number(userPoints) + Number(farmingScore) * multiplyScore));
+        putPoints(currentUser.username, (Number(userPoints) + Number(farmingScore) * Number(multiplyScore)), currentUser.farm_params.energy);
         claim();
     }
 
