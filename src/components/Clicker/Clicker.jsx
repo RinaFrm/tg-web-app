@@ -13,7 +13,7 @@ const Clicker = () => {
     const userEnergy = currentUser.farm_params.energy;
     const maxEnergy = currentUser.farm_params.max_energy;
     const pointsPerClick = currentUser.farm_params.points_per_click;
-    const energyStatus = currentUser.farm_params.status;
+    const [energyStatus, setEnergyStatus] = useState(currentUser.farm_params.status);
 
     const formatTime = (time) => {
         const hours = time.slice(-1) === 'h' ? time.slice(0, -1) : 8;
@@ -42,7 +42,11 @@ const Clicker = () => {
 
     function ClickCoin() {
         if(userEnergy >= pointsPerClick) {
-            userEnergy === maxEnergy && putEnergyStatus(currentUser.username, 'Recovery');
+            if(userEnergy === maxEnergy) {
+                putEnergyStatus(currentUser.username, 'Recovery');
+                setEnergyStatus('Recovery');
+            }
+
             const changeScore = Number(userPoints) + Number(pointsPerClick);
             const changeEnergy = Number(userEnergy) - Number(pointsPerClick);
             dispatch(updateEnergy(changeEnergy));
@@ -57,6 +61,7 @@ const Clicker = () => {
         if (hE === 0 & mE === 0 & sE === 0) {
             dispatch(updateEnergy(maxEnergy));
             putEnergyStatus(currentUser.username, 'Full');
+            setEnergyStatus('Full');
         } else if (mE === 0 && sE === 0) {
             setEnergyTime([hE - 1, 59, 59]);
         } else if (sE == 0) {
@@ -65,7 +70,7 @@ const Clicker = () => {
             setEnergyTime([hE, mE, sE - 1]);
         }
     };
-    
+
     useEffect(() => {
         const energyTimer = setInterval(() => {
             if (energyStatus === "Recovery") {

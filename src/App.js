@@ -71,7 +71,7 @@ function App() {
     tg.ready();
     dispatch(getUsers());
 
-    user ? dispatch(getUser(user?.username)) : dispatch(getUser(currentUser.username));
+    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test'));
   }, []);
 
   const onClose = () => {
