@@ -46,48 +46,33 @@ export const putPoints = (username, points, energy) => {
   })
 }
 
+const addUser = (username) => {
+  axios.post('https://eco.almazor.co/users', {
+    "username": username
+  })
+  .then((response) => {
+    console.log(response);
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+}
+
 function App() {
   const { tg, user } = useTelegram();
   const dispatch = useDispatch();
 
   const {users, loadingUsers, currentUser, loadingUser} = useSelector((state) => state.users);
 
+  // const existingUser = users.find(user => user.username === user.username);
+  loadingUser === 'failed' && addUser(user?.username);
+
   useEffect(() => {
     tg.ready();
+    dispatch(getUsers());
 
-    dispatch(getUsers())
-      .then(() => {
-        if (currentUser?.username) {
-          const existingUser = users.find(user => user.username === currentUser.username);
-          if (!existingUser) {
-            dispatch(addUser(currentUser.username));
-          } else {
-            dispatch(getUser(currentUser.username));
-          }
-        } else {
-          dispatch(getUser('test_user'));
-        }
-      })
-      .catch(error => {
-        console.log('Error loading users', error);
-      })
+    user ? dispatch(getUser(user?.username)) : dispatch(getUser(currentUser.username));
   }, []);
-
-  const addUser = (username) => {
-    axios.post('https://eco.almazor.co/users', {
-      "username": username
-    })
-    .then((response) => {
-      console.log(response.data);
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-  }
-
-  // useEffect(() => {
-  //   putPoints(currentUser.username, currentUser.points, currentUser.farm_params.energy);
-  // }, [currentUser.points])
 
   const onClose = () => {
     tg.close()
