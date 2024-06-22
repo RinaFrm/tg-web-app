@@ -64,13 +64,13 @@ function App() {
   }
 
   const {users, loadingUsers, currentUser, loadingUser} = useSelector((state) => state.users);
-
+console.log(users)
   useEffect(() => {
     tg.ready();
     tg.expand();
     dispatch(getUsers());
 
-    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test11'));
+    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
   }, []);
 
   const onCloseApp = () => {
@@ -80,7 +80,7 @@ function App() {
   const {onClose} = useDisclosure();
 
   const handleAddUser = () => {
-    addUser(user ? user?.username : 'test11');
+    addUser(user ? user?.username : 'test_user');
     onClose();
   }
    
@@ -99,7 +99,7 @@ function App() {
         {loadingUsers === 'loading' &&
           <Spinner label="Loading" color="warning" labelColor="warning" size="lg"/>
         }
-        {loadingUser === 'failde' &&
+        {loadingUser === 'failed' &&
           <Modal
             size="sm" 
             isOpen={loadingUser === 'failed'} 
@@ -128,7 +128,6 @@ function App() {
             </ModalContent>
           </Modal>
         }
-        
         {loadingUser === 'success' &&
           <>
           <Header />
