@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import './App.css';
 import './assets/styles/constans.css';
-import { Button, NextUIProvider, Spinner } from "@nextui-org/react";
+import { Button, Modal, ModalBody, ModalContent, NextUIProvider, Spinner, useDisclosure } from "@nextui-org/react";
 import { useDispatch, useSelector } from 'react-redux';
 import { useTelegram } from './hooks/useTelegram';
 import Header from './components/Header/Header';
@@ -63,21 +63,29 @@ function App() {
   const dispatch = useDispatch();
 
   const {users, loadingUsers, currentUser, loadingUser} = useSelector((state) => state.users);
-
+console.log(currentUser, loadingUser)
   // const existingUser = users.find(user => user.username === user.username);
-  loadingUser === 'failed' && addUser(user?.username);
+  //loadingUser === 'failed' && addUser(user?.username);
 
   useEffect(() => {
     tg.ready();
     dispatch(getUsers());
 
-    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test'));
+    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test2'));
   }, []);
 
-  const onClose = () => {
+  const onCloseApp = () => {
     tg.close()
   }
-  
+
+  const {onClose} = useDisclosure();
+
+  const handleAddUser = () => {
+    addUser(user ? user?.username : 'test2');
+    dispatch(getUser(user ? user?.username : 'test2'))
+    onClose;
+  }
+   
   return (
     <NextUIProvider>
       <div className="app_container">
@@ -85,7 +93,7 @@ function App() {
           color="primary" 
           variant="light" 
           size='sm' 
-          onClick={onClose}
+          onClick={onCloseApp}
           style={{alignSelf: 'flex-start', color: 'hsl(var(--nextui-warning-200))'}}
         >
           Close
@@ -93,6 +101,32 @@ function App() {
         {loadingUsers === 'loading' &&
           <Spinner label="Loading" color="warning" labelColor="warning" size="lg"/>
         }
+        <Modal
+          size="sm" 
+          isOpen={loadingUser === 'failed'} 
+          onClose={onClose}
+          backdrop='blur'
+          classNames={{
+              body: 'py-5',
+              base: "bg-[#CCE3FD] text-[#001731]",
+          }}          
+        >
+          <ModalContent>
+            {(onClose) => (
+                <ModalBody>
+                  <Button
+                    color="primary" 
+                    variant="light" 
+                    size='sm' 
+                    onClick={handleAddUser}
+                    onPress={onClose}
+                  >
+                    Welcome! Let's go!
+                  </Button>
+                </ModalBody>
+            )}
+          </ModalContent>
+        </Modal>
         {loadingUser === 'success' &&
           <>
           <Header />
