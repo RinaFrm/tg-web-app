@@ -107,8 +107,8 @@ const Clicker = () => {
         } else if (seconds == 0) {
             setTime([hours, minutes - 1, 59]);
         } else {
-            setTime([hours, minutes, seconds - 1]);
             setFarmingScore(Number(farmingScore) + farmPointsPerMin / 60);
+            setTime([hours, minutes, seconds - 1]);
         }
     };
 
