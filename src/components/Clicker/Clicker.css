@@ -7,6 +7,13 @@
     height: 80%;
 }
 
+.tap {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .coin__container {
     margin-bottom: 5%;
     cursor: pointer;
