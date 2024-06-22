@@ -95,8 +95,8 @@ const Clicker = () => {
     const [[h, m, s], setTime] = useState([hours, minutes, seconds]);
     const autofarmStatus = currentUser.autofarm_params.status;
     const farmPointsPerMin = currentUser.autofarm_params.farm_points_per_min;
-    const userFarmingScore = autofarmStatus === 'Not farming' ? Number(currentUser.autofarm_params.auto_farm_points).toFixed(2) : ((farmTimeLeftInSec / 60 * Number(farmPointsPerMin)).toFixed(2));
-    const [btnState, setBtnState] = useState(autofarmStatus === 'Farming' ? 'farming' : 'idle');
+    const userFarmingScore = autofarmStatus === 'Not farming' || autofarmStatus === 'Full' ? Number(currentUser.autofarm_params.auto_farm_points).toFixed(2) : ((farmTimeLeftInSec / 60 * Number(farmPointsPerMin)).toFixed(2));
+    const [btnState, setBtnState] = useState(autofarmStatus === 'Farming' ? 'farming' : autofarmStatus === 'Full' ? 'claim' : 'idle');
     const [farmingScore, setFarmingScore] = useState(userFarmingScore);
     const farmingScaleProcent = 100 - (h*3600 + m*60 + s) / (farmTime / 100);
 
