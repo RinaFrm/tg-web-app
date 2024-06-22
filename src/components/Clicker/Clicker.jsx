@@ -88,7 +88,7 @@ const Clicker = () => {
     });
 
     //AUTOFARMING
-    const farmTime = currentUser.autofarm_params.farm_time;
+    const farmTime = 120;
     const farmTimeLeftInSec =  Math.round((new Date(date.getTime() + date.getTimezoneOffset() * 60000) - (new Date(currentUser.autofarm_params.farm_time_start).getTime())) / 1000);
     // const [hours, minutes, seconds] = currentUser.autofarm_params.farm_time_start === 0 ? formatTime(farmTime) : formatMinTime(28800 - farmTimeLeftInSec);
     const [hours, minutes, seconds] = farmTimeLeftInSec > farmTime ? formatTime(farmTime) : formatTime(farmTime - farmTimeLeftInSec);
@@ -105,8 +105,10 @@ const Clicker = () => {
             setBtnState('claim');
         } else if (minutes === 0 && seconds === 0) {
             setTime([hours - 1, 59, 59]);
+            setFarmingScore(Number(farmingScore) + farmPointsPerMin / 60);
         } else if (seconds == 0) {
             setTime([hours, minutes - 1, 59]);
+            setFarmingScore(Number(farmingScore) + farmPointsPerMin / 60);
         } else {
             setFarmingScore(Number(farmingScore) + farmPointsPerMin / 60);
             setTime([hours, minutes, seconds - 1]);
@@ -116,7 +118,7 @@ const Clicker = () => {
     useEffect(() => {
         const farmingTimer = setInterval(() => {
             if(btnState === 'farming') {
-                tick(h, m, s) 
+                tick(h, m, s);
             } else {
                 clearInterval(farmingTimer);
             }
