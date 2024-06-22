@@ -46,32 +46,31 @@ export const putPoints = (username, points, energy) => {
   })
 }
 
-const addUser = (username) => {
-  axios.post('https://eco.almazor.co/users', {
-    "username": username
-  })
-  .then((response) => {
-    console.log(response);
-  })
-  .catch((error) => {
-    console.log(error)
-  })
-}
-
 function App() {
   const { tg, user } = useTelegram();
   const dispatch = useDispatch();
 
+  const addUser = (username) => {
+    axios.post('https://eco.almazor.co/users', {
+      "username": username
+    })
+    .then((response) => {
+      console.log(response);
+      dispatch(getUser(username));
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+  }
+
   const {users, loadingUsers, currentUser, loadingUser} = useSelector((state) => state.users);
-console.log(currentUser, loadingUser)
-  // const existingUser = users.find(user => user.username === user.username);
-  //loadingUser === 'failed' && addUser(user?.username);
 
   useEffect(() => {
     tg.ready();
+    tg.expand();
     dispatch(getUsers());
 
-    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test2'));
+    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test11'));
   }, []);
 
   const onCloseApp = () => {
@@ -81,9 +80,8 @@ console.log(currentUser, loadingUser)
   const {onClose} = useDisclosure();
 
   const handleAddUser = () => {
-    addUser(user ? user?.username : 'test2');
-    dispatch(getUser(user ? user?.username : 'test2'))
-    onClose;
+    addUser(user ? user?.username : 'test11');
+    onClose();
   }
    
   return (
@@ -104,8 +102,9 @@ console.log(currentUser, loadingUser)
         <Modal
           size="sm" 
           isOpen={loadingUser === 'failed'} 
-          onClose={onClose}
+          onClose={handleAddUser}
           backdrop='blur'
+          placement='center'
           classNames={{
               body: 'py-5',
               base: "bg-[#CCE3FD] text-[#001731]",
@@ -118,7 +117,7 @@ console.log(currentUser, loadingUser)
                     color="primary" 
                     variant="light" 
                     size='sm' 
-                    onClick={handleAddUser}
+                    onClick={() => handleAddUser()}
                     onPress={onClose}
                   >
                     Welcome! Let's go!
