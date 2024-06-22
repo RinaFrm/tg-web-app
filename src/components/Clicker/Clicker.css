@@ -8,7 +8,7 @@
 }
 
 .coin__container {
-    margin-bottom: 100px;
+    margin-bottom: 5%;
     cursor: pointer;
     border-radius: 260px;
     transition: transfrom .5s ease;
@@ -19,8 +19,8 @@
 }
 
 .coin__img {
-    width: 250px;
-    height: 250px;
+    width: 200px;
+    height: 200px;
 }
 
 .score {
