@@ -99,33 +99,36 @@ function App() {
         {loadingUsers === 'loading' &&
           <Spinner label="Loading" color="warning" labelColor="warning" size="lg"/>
         }
-        <Modal
-          size="sm" 
-          isOpen={loadingUser === 'failed'} 
-          onClose={handleAddUser}
-          backdrop='blur'
-          placement='center'
-          classNames={{
-              body: 'py-5',
-              base: "bg-[#CCE3FD] text-[#001731]",
-          }}          
-        >
-          <ModalContent>
-            {(onClose) => (
-                <ModalBody>
-                  <Button
-                    color="primary" 
-                    variant="light" 
-                    size='sm' 
-                    onClick={() => handleAddUser()}
-                    onPress={onClose}
-                  >
-                    Welcome! Let's go!
-                  </Button>
-                </ModalBody>
-            )}
-          </ModalContent>
-        </Modal>
+        {loadingUser === 'failde' &&
+          <Modal
+            size="sm" 
+            isOpen={loadingUser === 'failed'} 
+            onClose={handleAddUser}
+            backdrop='blur'
+            placement='center'
+            classNames={{
+                body: 'py-5',
+                base: "bg-[#CCE3FD] text-[#001731]",
+            }}          
+          >
+            <ModalContent>
+              {(onClose) => (
+                  <ModalBody>
+                    <Button
+                      color="primary" 
+                      variant="light" 
+                      size='sm' 
+                      onClick={() => handleAddUser()}
+                      onPress={onClose}
+                    >
+                      Welcome! Let's go!
+                    </Button>
+                  </ModalBody>
+              )}
+            </ModalContent>
+          </Modal>
+        }
+        
         {loadingUser === 'success' &&
           <>
           <Header />
