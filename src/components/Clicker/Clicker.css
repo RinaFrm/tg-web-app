@@ -12,6 +12,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    transition: pointer-events .3s ease, opacity .3s ease;
 }
 
 .coin__container {
