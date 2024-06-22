@@ -63,8 +63,8 @@ function App() {
     })
   }
 
-  const {users, loadingUsers, currentUser, loadingUser} = useSelector((state) => state.users);
-console.log(users)
+  const {loadingUsers, loadingUser} = useSelector((state) => state.users);
+
   useEffect(() => {
     tg.ready();
     tg.expand();

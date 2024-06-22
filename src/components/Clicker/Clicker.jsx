@@ -14,16 +14,17 @@ const Clicker = () => {
     const maxEnergy = currentUser.farm_params.max_energy;
     const pointsPerClick = currentUser.farm_params.points_per_click;
     const [energyStatus, setEnergyStatus] = useState(currentUser.farm_params.status);
+    const energyRecTime = currentUser.farm_params.recovery_time;
+
+    // const formatTime = (time) => {
+    //     const hours = time.slice(-1) === 'h' ? time.slice(0, -1) : 8;
+    //     const minutes = time.slice(-1) === 'm' ? time.slice(0, -1) : 0;
+    //     const seconds = time.slice(-1) === 's' ? time.slice(0, -1) : 0;
+        
+    //     return [hours, minutes, seconds]
+    // }
 
     const formatTime = (time) => {
-        const hours = time.slice(-1) === 'h' ? time.slice(0, -1) : 8;
-        const minutes = time.slice(-1) === 'm' ? time.slice(0, -1) : 0;
-        const seconds = time.slice(-1) === 's' ? time.slice(0, -1) : 0;
-        
-        return [hours, minutes, seconds]
-    }
-
-    const formatMinTime = (time) => {
         const hours = Math.floor(time / 60 / 60);
         const minutes = Math.floor(time / 60) - (hours * 60);
         const seconds = time % 60;
@@ -34,7 +35,8 @@ const Clicker = () => {
     //TAP
     const date = new Date();
     const timeLeftInSec =  Math.round((new Date(date.getTime() + date.getTimezoneOffset() * 60000) - (new Date(currentUser.farm_params.recovery_start_time).getTime())) / 1000);
-    const [hoursE, minutesE, secondsE] = timeLeftInSec > 3600 ? formatTime(currentUser.farm_params.recovery_time) : formatMinTime(3600 - timeLeftInSec);
+    // const [hoursE, minutesE, secondsE] = timeLeftInSec > 3600 ? formatTime(currentUser.farm_params.recovery_time) : formatMinTime(3600 - timeLeftInSec);
+    const [hoursE, minutesE, secondsE] = timeLeftInSec > energyRecTime ? formatTime(energyRecTime) : formatTime(energyRecTime - timeLeftInSec);
     const [[hE, mE, sE], setEnergyTime] = useState([hoursE, minutesE, secondsE]);
 
     //modal for energy out
@@ -87,15 +89,15 @@ const Clicker = () => {
     //AUTOFARMING
     const farmTime = currentUser.autofarm_params.farm_time;
     const farmTimeLeftInSec =  Math.round((new Date(date.getTime() + date.getTimezoneOffset() * 60000) - (new Date(currentUser.autofarm_params.farm_time_start).getTime())) / 1000);
-    const [hours, minutes, seconds] = currentUser.autofarm_params.farm_time_start === 0 ? formatTime(farmTime) : formatMinTime(28800 - farmTimeLeftInSec);
+    // const [hours, minutes, seconds] = currentUser.autofarm_params.farm_time_start === 0 ? formatTime(farmTime) : formatMinTime(28800 - farmTimeLeftInSec);
+    const [hours, minutes, seconds] = currentUser.autofarm_params.farm_time_start === 0 ? formatTime(farmTime) : formatTime(farmTime - farmTimeLeftInSec);
     const [[h, m, s], setTime] = useState([hours, minutes, seconds]);
-    const totalSeconds = seconds + minutes * 60 + hours * 3600;
     const autofarmStatus = currentUser.autofarm_params.status;
     const farmPointsPerMin = currentUser.autofarm_params.farm_points_per_min;
     const userFarmingScore = autofarmStatus === 'Not farming' ? currentUser.autofarm_params.auto_farm_points : ((farmTimeLeftInSec / 60 * Number(farmPointsPerMin)).toFixed(2));
     const [btnState, setBtnState] = useState(autofarmStatus === 'Farming' ? 'farming' : 'idle');
     const [farmingScore, setFarmingScore] = useState(userFarmingScore);
-    const farmingScaleProcent = 100 - totalSeconds / ((seconds + minutes*60 + hours*3600) / 100);
+    const farmingScaleProcent = 100 - farmTime / farmTimeLeftInSec;
 
     const tick = (hours, minutes, seconds) => {
         if (hours === 0 & minutes === 0 & seconds === 0) {
@@ -107,7 +109,7 @@ const Clicker = () => {
             setTime([hours, minutes - 1, 59]);
         } else {
             setTime([hours, minutes, seconds - 1]);
-            setFarmingScore((Number(farmingScore) + farmPointsPerMin / 60).toFixed(2));
+            setFarmingScore(Number(farmingScore) + farmPointsPerMin / 60);
         }
     };
 
@@ -212,7 +214,7 @@ const Clicker = () => {
                     <div onClick={() => claimAndStop()} className="autofarm__container">
                         <div style={{width: `${farmingScaleProcent}%`}} className="autofarm__scale"/>
                         <div className="autofarm_text">
-                            <p className="autofarm__title">Farming: <span className="autofarm__score">{farmingScore}</span></p>
+                            <p className="autofarm__title">Farming: <span className="autofarm__score">{Number(farmingScore).toFixed(2)}</span></p>
                             <div className="autofarm__timer">
                                 {`${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`}
                             </div>
@@ -243,7 +245,7 @@ const Clicker = () => {
                 <ModalContent>
                     {(onClose) => (
                         <ModalBody>
-                            <p>Out of energy! Wait 1h for recovery.</p>
+                            <p>Out of energy! Wait for recovery.</p>
                         </ModalBody>
                     )}
                 </ModalContent>
