@@ -64,6 +64,7 @@ const Clicker = () => {
             dispatch(updateEnergy(maxEnergy));
             putEnergyStatus(currentUser.username, 'Full');
             setEnergyStatus('Full');
+            setEnergyTime(formatTime(energyRecTime))
         } else if (mE === 0 && sE === 0) {
             setEnergyTime([hE - 1, 59, 59]);
         } else if (sE == 0) {
@@ -97,7 +98,6 @@ const Clicker = () => {
     const userFarmingScore = autofarmStatus === 'Not farming' ? Number(currentUser.autofarm_params.auto_farm_points).toFixed(2) : ((farmTimeLeftInSec / 60 * Number(farmPointsPerMin)).toFixed(2));
     const [btnState, setBtnState] = useState(autofarmStatus === 'Farming' ? 'farming' : 'idle');
     const [farmingScore, setFarmingScore] = useState(userFarmingScore);
-    const farmingScaleProcent = farmTimeLeftInSec / (farmTime / 100);
 
     const tick = (hours, minutes, seconds) => {
         if (hours === 0 & minutes === 0 & seconds === 0) {
@@ -114,9 +114,8 @@ const Clicker = () => {
 
     useEffect(() => {
         const farmingTimer = setInterval(() => {
-            if(autofarmStatus === 'Farming') {
+            if(btnState === 'farming') {
                tick(h, m, s) 
-               setBtnState('farming');
             } else {
                 clearInterval(farmingTimer);
             }
@@ -135,8 +134,8 @@ const Clicker = () => {
         setFarmingScore(0);
         setBtnState('idle');
         updateAutofarmStatus(currentUser.username, 'Claim');
-        dispatch(updateSliceAutofarmStatus('Not farming'))
-        setTime([parseInt(hours), parseInt(minutes), parseInt(seconds)]);
+        dispatch(updateSliceAutofarmStatus('Not farming'));
+        setTime(formatTime(farmTime));
     }
 
     const fullBarMultiplier = currentUser.autofarm_params.full_bar_multiplier;
@@ -211,7 +210,7 @@ const Clicker = () => {
                 }
                 {btnState === 'farming' &&
                     <div onClick={() => claimAndStop()} className="autofarm__container">
-                        <div style={{width: `${farmingScaleProcent}%`}} className="autofarm__scale"/>
+                        {/* <div style={{width: `${farmingScaleProcent}%`}} className="autofarm__scale"/> */}
                         <div className="autofarm_text">
                             <p className="autofarm__title">Farming: <span className="autofarm__score">{Number(farmingScore).toFixed(2)}</span></p>
                             <div className="autofarm__timer">
@@ -227,7 +226,7 @@ const Clicker = () => {
                         className="autofarm__btn text-lg text-primary-900"
                         onClick={() => claimMultiply()}
                     >
-                        Claim {farmingScore} * {fullBarMultiplier}
+                        Claim {Number(farmingScore).toFixed(2)} * {fullBarMultiplier}
                     </Button>
                 }
             </div>
