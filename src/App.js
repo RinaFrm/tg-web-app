@@ -63,7 +63,7 @@ function App() {
     })
   }
 
-  const {loadingUsers, loadingUser} = useSelector((state) => state.users);
+  const {users, loadingUsers, currentUser, loadingUser} = useSelector((state) => state.users);
 
   useEffect(() => {
     tg.ready();
@@ -80,7 +80,7 @@ function App() {
   const {onClose} = useDisclosure();
 
   const handleAddUser = () => {
-    addUser(user ? user?.username : 'test_user');
+    addUser(user ? user.username : 'test_user');
     onClose();
   }
    
@@ -107,7 +107,7 @@ function App() {
             backdrop='blur'
             placement='center'
             classNames={{
-                body: 'py-5',
+                body: 'py-10',
                 base: "bg-[#CCE3FD] text-[#001731]",
             }}          
           >
@@ -116,10 +116,11 @@ function App() {
                   <ModalBody>
                     <Button
                       color="primary" 
-                      variant="light" 
-                      size='sm' 
-                      onClick={() => handleAddUser()}
-                      onPress={onClose}
+                      size='lg' 
+                      onClick={() => {
+                        handleAddUser();
+                        onClose()
+                      }}
                     >
                       Welcome! Let's go!
                     </Button>
@@ -140,3 +141,4 @@ function App() {
 }
 
 export default App;
+
