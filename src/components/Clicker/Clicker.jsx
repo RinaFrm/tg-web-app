@@ -51,7 +51,7 @@ const Clicker = () => {
             const changeEnergy = Number(userEnergy) - Number(pointsPerClick);
             dispatch(updateEnergy(changeEnergy));
             dispatch(addPoints(Number(changeScore.toFixed(2))));
-            putPoints(currentUser.username, currentUser.points, currentUser.farm_params.energy);
+            putPoints(currentUser.username, changeScore, changeEnergy);
         } else {
             onOpen();
         }
@@ -213,7 +213,7 @@ const Clicker = () => {
                         className="autofarm__btn text-lg text-primary-900"
                         onClick={() => claimMultiply()}
                     >
-                        Claim {farmingScore} * 1.25
+                        Claim {farmingScore} * {fullBarMultiplier}
                     </Button>
                 }
             </div>
@@ -221,6 +221,7 @@ const Clicker = () => {
                 size="sm" 
                 isOpen={isOpen} 
                 onClose={onClose}
+                placement="center"
                 classNames={{
                     body: 'py-5',
                     base: "bg-[#CCE3FD] text-[#001731]",
