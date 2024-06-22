@@ -88,7 +88,7 @@ const Clicker = () => {
     });
 
     //AUTOFARMING
-    const farmTime = 120;
+    const farmTime = currentUser.autofarm_params.farm_time;
     const farmTimeLeftInSec =  Math.round((new Date(date.getTime() + date.getTimezoneOffset() * 60000) - (new Date(currentUser.autofarm_params.farm_time_start).getTime())) / 1000);
     // const [hours, minutes, seconds] = currentUser.autofarm_params.farm_time_start === 0 ? formatTime(farmTime) : formatMinTime(28800 - farmTimeLeftInSec);
     const [hours, minutes, seconds] = farmTimeLeftInSec > farmTime ? formatTime(farmTime) : formatTime(farmTime - farmTimeLeftInSec);
