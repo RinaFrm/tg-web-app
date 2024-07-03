@@ -70,7 +70,8 @@ function App() {
     tg.expand();
     dispatch(getUsers());
 
-    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
+    //user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
+    dispatch(getUser('test_user'));
   }, []);
 
   const onCloseApp = () => {
@@ -80,13 +81,11 @@ function App() {
   const {onClose} = useDisclosure();
 
   const handleAddUser = () => {
-    setInfo('Кнопка нажата')
+    alert(`Кнопка нажата, user: ${user?.username}`)
     addUser(user ? user.username : 'test_user');
     onClose();
   }
-
-  const [info, setInfo] = useState('');
-   
+  
   return (
     <NextUIProvider>
       <div className="app_container">
@@ -122,12 +121,11 @@ function App() {
                       size='lg' 
                       onClick={() => {
                         handleAddUser();
-                        onClose()
+                        onClose();
                       }}
                     >
                       Welcome! Let's go!
                     </Button>
-                    <p>{info}</p>
                   </ModalBody>
               )}
             </ModalContent>
