@@ -81,8 +81,8 @@ function App() {
   const {onClose} = useDisclosure();
 
   const handleAddUser = () => {
-    alert(`Кнопка нажата, user: ${user?.username}`)
     addUser(user ? user.username : 'test_user');
+    alert(`Кнопка нажата, user: ${user?.username}`);
     onClose();
   }
   
