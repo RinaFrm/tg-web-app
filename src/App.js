@@ -71,7 +71,7 @@ function App() {
     tg.expand();
     dispatch(getUsers());
 
-    user != undefined ? dispatch(getUser(user?.id)) : dispatch(getUser('test_user'));
+    user ? dispatch(getUser(user?.id)) : dispatch(getUser('test_user'));
   }, []);
 
   const onCloseApp = () => {
@@ -81,7 +81,7 @@ function App() {
   const {onClose} = useDisclosure();
 
   const handleAddUser = () => {
-    addUser(user != undefined ? user.id : 'test_user');
+    addUser(user ? user.id : 'test_user');
     onClose();
   }
   
