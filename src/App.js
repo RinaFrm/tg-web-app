@@ -83,6 +83,8 @@ function App() {
     addUser(user ? user.username : 'test_user');
     onClose();
   }
+
+  const [info, setInfo] = useState('');
    
   return (
     <NextUIProvider>
@@ -124,6 +126,7 @@ function App() {
                     >
                       Welcome! Let's go!
                     </Button>
+                    <p>{info}</p>
                   </ModalBody>
               )}
             </ModalContent>
