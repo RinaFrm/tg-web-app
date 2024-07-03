@@ -48,12 +48,11 @@ export const putPoints = (username, points, energy) => {
 
 function App() {
   const { tg, user } = useTelegram();
-  console.log(user)
   const dispatch = useDispatch();
 
   const addUser = (id) => {
     axios.post('https://eco.almazor.co/users', {
-      "username": JSON.stringify(id)
+      "username": id.toString()
     })
     .then((response) => {
       console.log(response);
@@ -71,7 +70,7 @@ function App() {
     tg.expand();
     dispatch(getUsers());
 
-    user ? dispatch(getUser(user?.id)) : dispatch(getUser('test_user'));
+    user ? dispatch(getUser((user?.id).toString())) : dispatch(getUser('test_user'));
   }, []);
 
   const onCloseApp = () => {
