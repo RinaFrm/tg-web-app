@@ -80,6 +80,7 @@ function App() {
   const {onClose} = useDisclosure();
 
   const handleAddUser = () => {
+    setInfo('Кнопка нажата')
     addUser(user ? user.username : 'test_user');
     onClose();
   }
