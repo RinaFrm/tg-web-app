@@ -48,15 +48,16 @@ export const putPoints = (username, points, energy) => {
 
 function App() {
   const { tg, user } = useTelegram();
+  console.log(user)
   const dispatch = useDispatch();
 
-  const addUser = (username) => {
+  const addUser = (id) => {
     axios.post('https://eco.almazor.co/users', {
-      "username": username
+      "username": id
     })
     .then((response) => {
       console.log(response);
-      dispatch(getUser(username));
+      dispatch(getUser(id));
     })
     .catch((error) => {
       console.log(error)
@@ -70,7 +71,7 @@ function App() {
     tg.expand();
     dispatch(getUsers());
 
-    user ? dispatch(getUser(user?.username)) : dispatch(getUser('test_user'));
+    user?.id != undefined ? dispatch(getUser(user?.id)) : dispatch(getUser('test_user'));
   }, []);
 
   const onCloseApp = () => {
@@ -80,8 +81,7 @@ function App() {
   const {onClose} = useDisclosure();
 
   const handleAddUser = () => {
-    addUser(user ? user.username : 'test_user');
-    alert(`Кнопка нажата, user: ${user?.username}`);
+    addUser(user?.id != undefined ? user.id : 'test_user');
     onClose();
   }
   
