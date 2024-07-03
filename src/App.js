@@ -53,7 +53,7 @@ function App() {
 
   const addUser = (id) => {
     axios.post('https://eco.almazor.co/users', {
-      "username": id
+      "username": JSON.stringify(id)
     })
     .then((response) => {
       console.log(response);
